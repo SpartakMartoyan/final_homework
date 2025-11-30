@@ -17,7 +17,6 @@ class _NewsPageState extends State<NewsPage> {
   final TextEditingController _searchController = TextEditingController();
   String? _selectedCategory;
 
-  // List of categories required by the assignment
   final List<String> _categories = [
     'business',
     'entertainment',
@@ -34,7 +33,6 @@ class _NewsPageState extends State<NewsPage> {
     super.dispose();
   }
 
-  // Helper to trigger the BLoC event
   void _fetchNews() {
     context.read<NewsBloc>().add(
       GetNewsEvent(
@@ -44,7 +42,6 @@ class _NewsPageState extends State<NewsPage> {
     );
   }
 
-  // Show Filter Dialog
   void _showFilterDialog() {
     showDialog(
       context: context,
@@ -64,7 +61,7 @@ class _NewsPageState extends State<NewsPage> {
                       setState(() {
                         _selectedCategory = value;
                       });
-                      Navigator.pop(context); // Close dialog
+                      Navigator.pop(context); 
                     },
                   ),
                   onTap: () {
@@ -80,7 +77,6 @@ class _NewsPageState extends State<NewsPage> {
           actions: [
             TextButton(
               onPressed: () {
-                // Clear filter
                 setState(() {
                   _selectedCategory = null;
                 });
@@ -90,7 +86,7 @@ class _NewsPageState extends State<NewsPage> {
             ),
             TextButton(
               onPressed: () {
-                _fetchNews(); // Apply logic (The requirement says "Apply" button triggers request)
+                _fetchNews(); 
                 Navigator.pop(context);
               },
               child: const Text('Apply'),
@@ -99,7 +95,6 @@ class _NewsPageState extends State<NewsPage> {
         );
       },
     ).then((_) {
-      // After dialog closes, fetch news with new filter
       _fetchNews();
     });
   }
@@ -118,7 +113,6 @@ class _NewsPageState extends State<NewsPage> {
       ),
       body: Column(
         children: [
-          // --- Search Bar ---
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -133,7 +127,7 @@ class _NewsPageState extends State<NewsPage> {
                         icon: const Icon(Icons.clear),
                         onPressed: () {
                           _searchController.clear();
-                          _fetchNews(); // Clear search and reload
+                          _fetchNews(); 
                         },
                       ),
                     ),
@@ -148,7 +142,6 @@ class _NewsPageState extends State<NewsPage> {
             ),
           ),
 
-          // --- Show selected category if any ---
           if (_selectedCategory != null)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -166,7 +159,6 @@ class _NewsPageState extends State<NewsPage> {
               ),
             ),
 
-          // --- News List with Pull to Refresh ---
           Expanded(
             child: BlocBuilder<NewsBloc, NewsState>(
               builder: (context, state) {
@@ -187,7 +179,6 @@ class _NewsPageState extends State<NewsPage> {
                           margin: const EdgeInsets.all(8.0),
                           child: ListTile(
                             onTap: () {
-                              // Navigate to details page
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
