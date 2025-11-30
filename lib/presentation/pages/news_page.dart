@@ -17,17 +17,14 @@ class NewsPage extends StatelessWidget {
       body: BlocBuilder<NewsBloc, NewsState>(
         builder: (context, state) {
 
-          //Show Loading Spinner
           if (state is NewsLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          //Show Error Message
           else if (state is NewsError) {
             return Center(child: Text(state.message));
           }
 
-          //Show the List of News
           else if (state is NewsLoaded) {
             return ListView.builder(
               itemCount: state.articles.length,
@@ -63,7 +60,6 @@ class NewsPage extends StatelessWidget {
             );
           }
 
-          //Default 
           return const Center(child: Text('Start by loading news...'));
         },
       ),
