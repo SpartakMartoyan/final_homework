@@ -7,10 +7,9 @@ import 'data/repositories/news_repository_impl.dart';
 import 'domain/usecases/get_top_headlines.dart';
 import 'presentation/bloc/news_bloc.dart';
 import 'presentation/bloc/news_event.dart';
-import 'presentation/pages/news_page.dart'; // We will create this next!
+import 'presentation/pages/news_page.dart'; //not created yet
 
 void main() {
-  // 1. Initialize the dependencies
   final http.Client client = http.Client();
   final remoteDataSource = RemoteDataSourceImpl(client: client);
   final repository = NewsRepositoryImpl(remoteDataSource: remoteDataSource);
@@ -32,10 +31,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      // 2. Provide the BLoC to the entire app
+      
       home: BlocProvider(
         create: (context) => NewsBloc(getTopHeadlines: getTopHeadlines)
-          ..add(GetNewsEvent()), // 3. Immediately ask for news when app starts
+          ..add(GetNewsEvent()),
         child: const NewsPage(),
       ),
     );
