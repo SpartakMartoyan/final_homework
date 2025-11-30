@@ -7,15 +7,14 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final GetTopHeadlines getTopHeadlines;
 
   NewsBloc({required this.getTopHeadlines}) : super(NewsInitial()) {
-    // When "GetNewsEvent" happens, execute this logic:
     on<GetNewsEvent>((event, emit) async {
-      emit(NewsLoading()); // 1. Tell UI to show loading spinner
+      emit(NewsLoading()); 
 
       try {
-        final articles = await getTopHeadlines(); // 2. Fetch data
-        emit(NewsLoaded(articles)); // 3. Tell UI to show data
+        final articles = await getTopHeadlines(); 
+        emit(NewsLoaded(articles)); 
       } catch (e) {
-        emit(NewsError("Failed to fetch news")); // 4. Tell UI to show error
+        emit(NewsError("Failed to fetch news")); 
       }
     });
   }
