@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../domain/entities/article.dart';
 import '../../domain/usecases/get_top_headlines.dart';
 import 'news_event.dart';
 import 'news_state.dart';
@@ -6,16 +7,61 @@ import 'news_state.dart';
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final GetTopHeadlines getTopHeadlines;
 
+  // We keep a local copy of the full list for offline searching
+  List<Article> _originalList = [];
+
   NewsBloc({required this.getTopHeadlines}) : super(NewsInitial()) {
-    // When "GetNewsEvent" happens, execute this logic:
     on<GetNewsEvent>((event, emit) async {
-      emit(NewsLoading()); // 1. Tell UI to show loading spinner
+
+      // 1. If we currently have data, keep it in memory before we switch to 'Loading'
+      if (state is NewsLoaded) {
+        // Only update our "master list" if we aren't already searching
+        // This ensures we always search against the full list, not a sub-list
+        if (event.query == null || event.query!.isEmpty) {
+          _originalList = (state as NewsLoaded).articles;
+        }
+      }
+
+      emit(NewsLoading());
 
       try {
-        final articles = await getTopHeadlines(); // 2. Fetch data
-        emit(NewsLoaded(articles)); // 3. Tell UI to show data
+        // 2. Try to fetch from API
+        final articles = await getTopHeadlines(
+          category: event.category,
+          query: event.query,
+        );
+
+        // If successful, update our local master list (only if not searching)
+        if (event.query == null || event.query!.isEmpty) {
+          _originalList = articles;
+        }
+
+        if (articles.isEmpty) {
+          emit(const NewsError("No Results Found")); //
+        } else {
+          emit(NewsLoaded(articles));
+        }
       } catch (e) {
-        emit(NewsError("Failed to fetch news")); // 4. Tell UI to show error
+        // 3. OFFLINE FALLBACK
+        // If API fails, check if we have a query and local data
+        if (event.query != null && event.query!.isNotEmpty && _originalList.isNotEmpty) {
+          final query = event.query!.toLowerCase();
+
+          // Filter locally
+          final localResults = _originalList.where((article) {
+            final title = article.title?.toLowerCase() ?? '';
+            return title.contains(query);
+          }).toList();
+
+          if (localResults.isEmpty) {
+            emit(const NewsError("No Results Found"));
+          } else {
+            emit(NewsLoaded(localResults));
+          }
+        } else {
+          // If we can't search locally, show the actual error
+          emit(const NewsError("Failed to fetch news. Check connection."));
+        }
       }
     });
   }

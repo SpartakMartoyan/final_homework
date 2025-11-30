@@ -8,5 +8,11 @@ abstract class NewsEvent extends Equatable {
 }
 
 class GetNewsEvent extends NewsEvent {
-  // We don't need any special data for this event yet
+  final String? category;
+  final String? query;
+
+  const GetNewsEvent({this.category, this.query});
+
+  @override
+  List<Object> get props => [category ?? '', query ?? ''];
 }

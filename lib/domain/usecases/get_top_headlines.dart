@@ -6,8 +6,7 @@ class GetTopHeadlines {
 
   GetTopHeadlines(this.repository);
 
-  // This function makes the class callable like a function
-  Future<List<Article>> call() async {
-    return await repository.getTopHeadlines();
+  Future<List<Article>> call({String? category, String? query}) async {
+    return await repository.getTopHeadlines(category: category, query: query);
   }
 }

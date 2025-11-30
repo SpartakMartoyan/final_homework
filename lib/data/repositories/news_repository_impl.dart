@@ -8,13 +8,10 @@ class NewsRepositoryImpl implements NewsRepository {
   NewsRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<List<Article>> getTopHeadlines() async {
+  Future<List<Article>> getTopHeadlines({String? category, String? query}) async {
     try {
-      final articleModels = await remoteDataSource.getTopHeadlines();
-      return articleModels;
+      return await remoteDataSource.getTopHeadlines(category: category, query: query);
     } catch (e) {
-      // For now, we just rethrow the error.
-      // In a production app, you might map this to a specific Failure class.
       rethrow;
     }
   }
