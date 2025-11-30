@@ -18,7 +18,6 @@ class ArticleDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. Image
             if (article.urlToImage != null)
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
@@ -33,14 +32,12 @@ class ArticleDetailPage extends StatelessWidget {
               ),
             const SizedBox(height: 16),
 
-            // 2. Title
             Text(
               article.title ?? 'No Title',
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
 
-            // 3. Author & Date
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -52,21 +49,19 @@ class ArticleDetailPage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  article.publishedAt?.substring(0, 10) ?? '', // Show only YYYY-MM-DD
+                  article.publishedAt?.substring(0, 10) ?? '', 
                   style: const TextStyle(color: Colors.grey),
                 ),
               ],
             ),
             const SizedBox(height: 16),
 
-            // 4. Description
             Text(
               article.description ?? 'No Description Available',
               style: const TextStyle(fontSize: 16, height: 1.5),
             ),
             const SizedBox(height: 16),
 
-            // 5. Content
             Text(
               article.content ?? '',
               style: const TextStyle(fontSize: 14, color: Colors.black87),
