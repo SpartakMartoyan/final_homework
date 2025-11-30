@@ -14,7 +14,6 @@ class NewsRepositoryImpl implements NewsRepository {
       return articleModels;
     } catch (e) {
       // For now, we just rethrow the error.
-      // In a production app, you might map this to a specific Failure class.
       rethrow;
     }
   }
